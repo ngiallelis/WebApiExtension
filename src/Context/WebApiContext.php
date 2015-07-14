@@ -358,6 +358,36 @@ class WebApiContext implements ApiClientAwareContext
         }
     }
 
+    /**
+     * Returns last response.
+     *
+     * @return \GuzzleHttp\Message\ResponseInterface
+     */
+    protected function getResponse()
+    {
+        return $this->response;
+    }
+
+    /**
+     * Returns placeholder value.
+     *
+     * @return string
+     */
+    protected function getPlaceHolder($key)
+    {
+        return $this->placeHolders[$key];
+    }
+
+    /**
+     * Returns placeholders.
+     *
+     * @return array
+     */
+    protected function getPlaceHolders()
+    {
+        return $this->placeHolders;
+    }
+
     private function sendRequest()
     {
         try {
