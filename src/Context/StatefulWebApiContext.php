@@ -6,31 +6,20 @@ class StatefulWebApiContext extends \Behat\WebApiExtension\Context\WebApiContext
 	protected $dateFormat = 'Y-m-d';
 
 	/**
-	 * @Transform table:dateType,date
-	 */
-	public function castRelativeToAbsoluteDate(TableNode $datesTable) {
-		$dates = [];
-		foreach ($datesTable->getHash() as $dateHash) {
-			$dates[$dateHash['dateType']] = $this->transformDate($dateHash['date']);
-		}
-		return $dates;
-	}
-
-	/**
-	 * @Given the following dates:
+	 * @Given the following data:
 	 *
 	 * Usage:
-	 * Given the following dates:
-	 *	| dateType | date    |
-	 *	| obDate   | +1 day  |
-	 *	| ibDate   | +1 week |
+	 * Given the following data:
+	 *	| key      | value        |
+	 *	| dataKey1 | sampleValue1 |
+	 *	| dataKey2 | sampleValue2 |
 	 *
-	 * The placeholders <obDate>, <ibDate> will be created
+	 *  Stores the data for future use
 	 */
-	public function setPlaceHolders(array $placeholders)
+	public function setPlaceHolders(TableNode $placeholders)
 	{
-		foreach ($placeholders as $key => $value) {
-			$this->setPlaceHolder($key, $value);
+		foreach ($placeholders->getHash() as $row) {
+			$this->setPlaceHolder($row['key'], $row['value']);
 		}
 	}
 
@@ -38,9 +27,8 @@ class StatefulWebApiContext extends \Behat\WebApiExtension\Context\WebApiContext
 	 * @Given that I store response variable :variable as :name
 	 *
 	 * Usage:
-	 * Given that I store response variable "results.searchID" as "searchID"
+	 * Given that I store response variable "owner.id" as "ownerID"
 	 *
-	 * The placeholder <searchID> will be created
 	 */
 	public function storeResponseVariable($variable, $name)
 	{
@@ -83,7 +71,7 @@ class StatefulWebApiContext extends \Behat\WebApiExtension\Context\WebApiContext
 	 * @Given /^that the date "([^"]*)" is "([^"]*)"$/
 	 *
 	 * Usage:
-	 * Given that the date "ibDate" is "+1 week"
+	 * Given that the date "sampleDate" is "+1 week"
 	 *
 	 */
 	public function addDateAsPlaceholder($dateName, $value)
@@ -95,6 +83,13 @@ class StatefulWebApiContext extends \Behat\WebApiExtension\Context\WebApiContext
 		return $this->dateFormat;
 	}
 
+	/**
+	 * @Given /^that the date format is "([^"]*)"$/
+	 *
+	 * Usage:
+	 * Given that the date format is "D, d M Y H:i:s"
+	 *
+	 */
 	public function setDateFormat($format) {
 		$this->dateFormat = $format;
 	}
